@@ -1,5 +1,11 @@
 # ML Model Fingerprinting with CNN, DNN, Tiny LLM, and Tiny VLM
 
+
+## To do
+
+- Get the base models accuracy, and other parameters
+- extend this work to fashionMNIST, 
+
 ## Overview
 
 This project explores **machine learning model fingerprinting through power and hardware profiling**.
