@@ -1,5 +1,6 @@
 import json
 import os
+from pyexpat import model
 import sys
 import time
 import uuid
@@ -142,11 +143,11 @@ def run_dnn(model, image_tensor):
     return pred, exec_time
 
 
-def build_row(model_name, prediction, exec_time, tracker, emissions_value, model_metrics, true_label, sample_index):
+def build_row(model_name, prediction, exec_time, tracker, emissions_value, model_metrics, true_label, sample_index, model_param):
     cpu_usage = psutil.cpu_percent(interval=None)
     ram_usage = psutil.virtual_memory().percent
     cpu_freq = psutil.cpu_freq().current if psutil.cpu_freq() else "N/A"
-    gpu_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "None (CPU Only)"
+    gpu_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU Only"
 
     return {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -175,6 +176,7 @@ def build_row(model_name, prediction, exec_time, tracker, emissions_value, model
         "model_recall_weighted": model_metrics.get("recall_weighted"),
         "model_f1_weighted": model_metrics.get("f1_weighted"),
         "model_flops": model_metrics.get("flops"),
+        "model_param" : model_param
     }
 
 
@@ -234,6 +236,7 @@ def collect_for_model(model_name, num_samples=1000, flush_every=50):
 
         tracker = EmissionsTracker(save_to_file=False, log_level="error")
         tracker.start()
+        model_param = 0
 
         if model_name == "CNN":
             pred, exec_time = run_cnn(model, image_tensor)
@@ -254,6 +257,7 @@ def collect_for_model(model_name, num_samples=1000, flush_every=50):
             exec_time = time.time() - start_time
 
         emissions_value = tracker.stop()
+        model_param = sum(p.numel() for p in model.parameters() if p.requires_grad)
 
         row = build_row(
             model_name=model_name,
@@ -263,7 +267,8 @@ def collect_for_model(model_name, num_samples=1000, flush_every=50):
             emissions_value=emissions_value,
             model_metrics=model_metrics,
             true_label=int(true_label),
-            sample_index=i
+            sample_index=i,
+            model_param = model_param
         )
 
         rows.append(row)
