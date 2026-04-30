@@ -1,2 +1,7 @@
 psutil==5.9.8
 tqdm==4.64.1
+pandas==2.2.3
+torch
+torchvision
+codecarbon
+numpy==2.0.2
