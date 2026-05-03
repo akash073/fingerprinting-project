@@ -1,7 +1,11 @@
 
 sudo apt install -y \
   build-essential \
+  gcc \
+  g++ \
+  make \
   libssl-dev \
+  openssl \
   libffi-dev \
   zlib1g-dev \
   libncurses5-dev \
@@ -11,8 +15,10 @@ sudo apt install -y \
   libsqlite3-dev \
   libbz2-dev \
   liblzma-dev \
+  libopenblas-dev \
   tk-dev \
-  wget
+  wget \
+  git
 
 
 cd /tmp
