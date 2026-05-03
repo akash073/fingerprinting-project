@@ -1,3 +1,20 @@
+
+sudo apt install -y \
+  build-essential \
+  libssl-dev \
+  libffi-dev \
+  zlib1g-dev \
+  libncurses5-dev \
+  libgdbm-dev \
+  libnss3-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  libbz2-dev \
+  liblzma-dev \
+  tk-dev \
+  wget
+
+
 cd /tmp
 
 # Download
