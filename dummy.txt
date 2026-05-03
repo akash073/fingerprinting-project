@@ -88,11 +88,7 @@ sudo make altinstall
   --prefix=/usr/local/python3.9 \
   --with-ensurepip=install \
   --with-openssl=/usr \
-  --with-openssl-rpath=auto \
-  --enable-shared \
-  --build=arm-linux-gnueabihf \
-  LDFLAGS="-Wl,-rpath /usr/local/python3.9/lib" \
-  CFLAGS="-march=armv7-a -mfpu=neon-vfpv4 -mfloat-abi=hard"
+  --with-openssl-rpath=auto
 
 
 # Add Python 3.9 to PATH permanently
