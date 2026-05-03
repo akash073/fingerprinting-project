@@ -201,3 +201,22 @@ cmake --version
 # Build and install into venv
 python setup.py install
 
+
+# Remove old clone
+cd ~
+rm -rf pytorch
+
+# Fresh clone with all submodules
+git clone --recursive https://github.com/pytorch/pytorch
+cd pytorch
+
+# Checkout Python 3.9 compatible version
+git checkout v2.0.1
+git submodule sync
+git submodule update --init --recursive
+
+# Verify
+ls CMakeLists.txt
+
+
+
