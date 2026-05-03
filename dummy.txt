@@ -1,3 +1,5 @@
+https://www.zagrosrobotics.com/shop/custom.aspx?recid=99
+
 sudo apt-get install python3-numpy python3-wheel python3-setuptools python3-future python3-yaml python3-six python3-requests python3-pip python3-pillow
 
 
