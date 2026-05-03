@@ -7,6 +7,41 @@ wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz
 tar -xf Python-3.9.18.tgz
 cd Python-3.9.18
 
+
+
+
+# Install OpenSSL dependencies first
+sudo apt install -y libssl-dev openssl libffi-dev
+
+# Clean previous build (important!)
+cd /tmp/Python-3.9.18
+make clean
+
+# Configure with SSL support
+./configure \
+  --enable-optimizations \
+  --prefix=/usr/local/python3.9 \
+  --with-ensurepip=install \
+  --with-openssl=/usr \
+  --with-openssl-rpath=auto \
+  --enable-shared \
+  LDFLAGS="-Wl,-rpath /usr/local/python3.9/lib"
+
+# Build (use all available cores)
+make -j$(nproc)
+
+# Install
+sudo make altinstall
+
+# Update shared library cache
+sudo ldconfig
+
+# Verify SSL is working
+python3.9 -c "import ssl; print(ssl.OPENSSL_VERSION)"
+
+
+
+####################################################
 # Configure
 ./configure --enable-optimizations --prefix=/usr/local/python3.9 --with-ensurepip=install
 
@@ -15,6 +50,10 @@ make -j$(nproc)
 
 # Install
 sudo make altinstall
+###################################################
+
+
+
 
 # Add Python 3.9 to PATH permanently
 echo 'export PATH=/usr/local/python3.9/bin:$PATH' >> ~/.bashrc
