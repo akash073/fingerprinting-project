@@ -6,6 +6,7 @@ sudo apt install -y \
   gcc \
   g++ \
   make \
+  cmake \
   build-essential \
   crossbuild-essential-armhf \
   libssl-dev \
@@ -145,6 +146,57 @@ export USE_QNNPACK=0
 export USE_NNPACK=0
 export USE_DISTRIBUTED=0
 export MAX_JOBS=2
+
+
+# Build Updated cmake
+
+# Remove old cmake
+sudo apt remove cmake -y
+
+# Download pre-built CMake 3.26.4 for ARM 32-bit
+cd /tmp
+wget https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-armv7l.tar.gz
+
+# Extract
+tar -xf cmake-3.26.4-linux-armv7l.tar.gz
+
+# Move to /usr/local
+sudo mv cmake-3.26.4-linux-armv7l /usr/local/cmake
+
+# Add to PATH permanently
+echo 'export PATH=/usr/local/cmake/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+# Verify
+cmake --version
+# Expected: cmake version 3.26.4
+
+
+
+
+# ubuntu 20.04
+# Remove old cmake
+sudo apt remove cmake -y
+
+# Install dependencies
+sudo apt install -y software-properties-common apt-transport-https ca-certificates wget
+
+# Add Kitware official repo
+wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | \
+  gpg --dearmor - | \
+  sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg > /dev/null
+
+# Add repo for Ubuntu 20.04 (Focal)
+echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | \
+  sudo tee /etc/apt/sources.list.d/kitware.list > /dev/null
+
+# Update and install
+sudo apt update
+sudo apt install -y cmake
+
+# Verify
+cmake --version
+# Expected: cmake version 3.26.x or higher
 
 # Build and install into venv
 python setup.py install
