@@ -1,24 +1,29 @@
+# Update first
+sudo apt update
 
+# Install ARM 32-bit specific build tools
 sudo apt install -y \
-  build-essential \
   gcc \
   g++ \
   make \
+  build-essential \
+  crossbuild-essential-armhf \
   libssl-dev \
-  openssl \
   libffi-dev \
   zlib1g-dev \
+  libbz2-dev \
+  libreadline-dev \
+  libsqlite3-dev \
   libncurses5-dev \
   libgdbm-dev \
   libnss3-dev \
-  libreadline-dev \
-  libsqlite3-dev \
-  libbz2-dev \
   liblzma-dev \
-  libopenblas-dev \
   tk-dev \
-  wget \
-  git
+  openssl \
+  wget
+
+# Verify GCC works
+gcc --version
 
 
 cd /tmp
