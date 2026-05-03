@@ -45,7 +45,7 @@ sudo apt install -y libssl-dev openssl libffi-dev
 cd /tmp/Python-3.9.18
 make clean
 
-# Configure with SSL support
+# Configure with SSL support for amd64 processor
 ./configure \
   --enable-optimizations \
   --prefix=/usr/local/python3.9 \
@@ -54,6 +54,16 @@ make clean
   --with-openssl-rpath=auto \
   --enable-shared \
   LDFLAGS="-Wl,-rpath /usr/local/python3.9/lib"
+
+
+
+# ARM Processor
+./configure \
+  --enable-optimizations \
+  --prefix=/usr/local/python3.9 \
+  --with-ensurepip=install \
+  --with-openssl=/usr \
+  --with-openssl-rpath=auto
 
 # Build (use all available cores)
 make -j$(nproc)
@@ -82,13 +92,6 @@ sudo make altinstall
 
 
 
-# ARM Processor
-./configure \
-  --enable-optimizations \
-  --prefix=/usr/local/python3.9 \
-  --with-ensurepip=install \
-  --with-openssl=/usr \
-  --with-openssl-rpath=auto
 
 
 # Add Python 3.9 to PATH permanently
