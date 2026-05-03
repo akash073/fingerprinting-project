@@ -218,5 +218,7 @@ git submodule update --init --recursive
 # Verify
 ls CMakeLists.txt
 
+# Add policy to top of CMakeLists.txt
+sed -i '1s/^/cmake_policy(SET CMP0000 NEW)\n/' CMakeLists.txt
 
 
