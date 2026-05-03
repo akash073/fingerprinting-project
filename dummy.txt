@@ -1,3 +1,24 @@
+
+# Deactivate first
+deactivate
+
+# Install virtualenv using Python 3.9 directly
+/usr/local/python3.9/bin/python3.9 -m pip install virtualenv
+
+# Remove old venv
+rm -rf ~/myenv
+
+# Create venv with explicit python path
+/usr/local/python3.9/bin/python3.9 -m virtualenv myenv5
+
+# Activate
+source ~/myenv/bin/activate
+
+# Verify
+python --version
+# Expected: Python 3.9.18
+
+
 # Update first
 sudo apt update
 
