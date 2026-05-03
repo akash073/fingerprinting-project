@@ -55,8 +55,6 @@ make clean
   --enable-shared \
   LDFLAGS="-Wl,-rpath /usr/local/python3.9/lib"
 
-
-
 # ARM Processor
 ./configure \
   --enable-optimizations \
@@ -133,6 +131,12 @@ pip install numpy pyyaml setuptools cffi typing_extensions
 cd ~
 git clone --recursive https://github.com/pytorch/pytorch
 cd pytorch
+
+# Clone and checkout PyTorch 2.0.1 (last version supporting Python 3.9)
+git checkout v2.0.1
+git submodule sync
+git submodule update --init --recursive
+
 
 # Set build flags for Pi 32-bit
 export USE_CUDA=0
