@@ -44,3 +44,26 @@ pip --version
 # Deactivate when done
 # deactivate
 
+
+# Install dependencies
+sudo apt install -y libopenblas-dev libblas-dev m4 cmake cython python3-dev
+
+# Install Python build deps
+pip install numpy pyyaml setuptools cffi typing_extensions
+
+# Clone PyTorch
+cd ~
+git clone --recursive https://github.com/pytorch/pytorch
+cd pytorch
+
+# Set build flags for Pi 32-bit
+export USE_CUDA=0
+export USE_MKLDNN=0
+export USE_QNNPACK=0
+export USE_NNPACK=0
+export USE_DISTRIBUTED=0
+export MAX_JOBS=2
+
+# Build and install into venv
+python setup.py install
+
