@@ -105,14 +105,18 @@ python3.9 -m pip install --upgrade pip
 
 # ── VENV SETUP ──────────────────────────────────────
 
+
+/usr/local/python3.9/bin/python3.9 -m venv myenv4
+
+
 # Install venv module
 python3.9 -m pip install virtualenv
 
 # Create virtual environment (change 'myenv' to your preferred name)
-python3.9 -m venv ~/myenv
+python3.9 -m venv myenv
 
 # Activate the virtual environment
-source ~/myenv/bin/activate
+source myenv/bin/activate
 
 # Verify venv is using Python 3.9.18
 python --version
@@ -129,7 +133,6 @@ sudo apt install -y libopenblas-dev libblas-dev m4 cmake cython python3-dev
 pip install numpy pyyaml setuptools cffi typing_extensions
 
 # Clone PyTorch
-cd ~
 git clone --recursive https://github.com/pytorch/pytorch
 cd pytorch
 
