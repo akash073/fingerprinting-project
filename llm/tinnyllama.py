@@ -7,7 +7,7 @@ device = "cpu"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    torch_dtype=torch.float32,  # float32 for CPU stability
+    dtype=torch.float32,  # float32 for CPU stability
 ).to(device)
 
 messages = [
@@ -22,9 +22,9 @@ with torch.no_grad():
     outputs = model.generate(
         **inputs,
         max_new_tokens=512,
-        temperature=1,
-        top_p=0.9,
-        do_sample=False,
+        # temperature=1,
+        # top_p=0.9,
+        # do_sample=False,
         repetition_penalty=1.1,
         pad_token_id=tokenizer.eos_token_id,
     )

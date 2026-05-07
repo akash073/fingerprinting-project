@@ -103,7 +103,6 @@ data/interim/
 # =========================
 # Ignore trained weights by default
 checkpoints/*.pth
-*.pth
 
 # Optional: keep folder structure if empty
 !checkpoints/.gitkeep
