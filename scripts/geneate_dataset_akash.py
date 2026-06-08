@@ -225,6 +225,47 @@ def _get_gpu_static():
 GPU_STATIC = _get_gpu_static()
 
 
+def _get_gpu_core_thread():
+    """
+    Return (gpu_core_count, gpu_thread_count) where:
+      - gpu_core_count  = total CUDA cores  (multiprocessor_count * cores_per_sm)
+      - gpu_thread_count = max threads per device (gpu_core_count * max_threads_per_block,
+                           capped to a sensible ceiling via device properties)
+    Falls back to torch.cuda device properties when pynvml SM count is unavailable.
+    """
+    if not torch.cuda.is_available():
+        return None, None
+
+    try:
+        props = torch.cuda.get_device_properties(0)
+        sm_count = props.multi_processor_count
+
+        # Cores-per-SM lookup by compute capability major version
+        cc_major = props.major
+        cores_per_sm_map = {
+            2: 32,   # Fermi
+            3: 192,  # Kepler
+            5: 128,  # Maxwell
+            6: 64,   # Pascal (GP100=64, GP10x=128 — use 64 as conservative default)
+            7: 64,   # Volta / Turing
+            8: 128,  # Ampere
+            9: 128,  # Ada Lovelace / Hopper
+        }
+        cores_per_sm = cores_per_sm_map.get(cc_major, 64)
+        gpu_core_count = sm_count * cores_per_sm
+
+        # gpu_thread_count = cores * max_threads_per_multiprocessor
+        gpu_thread_count = sm_count * props.max_threads_per_multi_processor
+
+        return gpu_core_count, gpu_thread_count
+
+    except Exception:
+        return None, None
+
+
+GPU_CORE_COUNT, GPU_THREAD_COUNT = _get_gpu_core_thread()
+
+
 # ============================================================
 # Per-sample hardware helpers
 # ============================================================
@@ -583,6 +624,8 @@ def build_row(
         "cpu_architecture":             CPU_ARCH,
         "cpu_core_count":               CPU_CORE_COUNT,
         "cpu_thread_count":             CPU_THREAD_COUNT,
+        "cpu_core":                     CPU_CORE_COUNT,
+        "cpu_thread":                   CPU_THREAD_COUNT,
         "cpu_tdp_w":                    CPU_TDP_W,
         "cpu_usage_pct":                get_cpu_usage(),
         "cpu_clock_mhz":                get_cpu_freq(),
@@ -592,6 +635,8 @@ def build_row(
 
         # --- GPU hardware ---
         "gpu_model":                    get_gpu_name(),
+        "gpu_core":                     GPU_CORE_COUNT,
+        "gpu_thread":                   GPU_THREAD_COUNT,
         "gpu_driver_version":           GPU_STATIC["gpu_driver_version"],
         "gpu_compute_capability":       GPU_STATIC["gpu_compute_capability"],
         "gpu_power_limit_w":            GPU_STATIC["gpu_power_limit_w"],
