@@ -807,10 +807,10 @@ def collect_for_model(model_name, num_samples=250, flush_every=25):
 
 
 def main():
-    collect_for_model("CNN",      num_samples=250, flush_every=25)
-    collect_for_model("DNN",      num_samples=250, flush_every=25)
-    collect_for_model("Tiny LLM", num_samples=250, flush_every=25)
-    collect_for_model("Tiny VLM", num_samples=250, flush_every=25)
+    collect_for_model("CNN",      num_samples=1000, flush_every=25)
+    collect_for_model("DNN",      num_samples=1000, flush_every=25)
+    collect_for_model("Tiny LLM", num_samples=1000, flush_every=25)
+    collect_for_model("Tiny VLM", num_samples=1000, flush_every=25)
     print("\nDone.")
 
 
