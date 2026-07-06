@@ -45,6 +45,44 @@ from sklearn.metrics import (
 # ============================================================
 # Config
 # ============================================================
+def get_cpu_model():
+    try:
+        import cpuinfo
+        return cpuinfo.get_cpu_info().get("brand_raw", "Unknown")
+    except Exception:
+        return platform.processor() or "Unknown"
+    
+def get_os_full_name():
+    system = platform.system()
+    arch = platform.machine()
+
+    if system == "Windows":
+        return f"Windows {platform.release()} {platform.version()} {arch}"
+
+    if system == "Linux":
+        try:
+            os_info = {}
+            with open("/etc/os-release", "r", encoding="utf-8") as f:
+                for line in f:
+                    if "=" in line:
+                        k, v = line.strip().split("=", 1)
+                        os_info[k] = v.strip('"')
+            return f"{os_info.get('PRETTY_NAME', 'Linux')} {arch}"
+        except Exception:
+            return f"Linux {platform.release()} {arch}"
+
+    if system == "Darwin":
+        return f"macOS {platform.mac_ver()[0]} {arch}"
+
+    return f"{system} {platform.release()} {arch}"
+
+CPU_MODEL_NAME = get_cpu_model()
+OS_FULL_NAME = get_os_full_name()
+PYTHON_VERSION = sys.version.split()[0]
+PENNYLANE_VERSION = qml.__version__
+SYSTEM_RAM_TOTAL_GB = round(psutil.virtual_memory().total / (1024 ** 3), 2)
+CPU_CORE_COUNT = psutil.cpu_count(logical=False)
+CPU_THREAD_COUNT = psutil.cpu_count(logical=True)
 
 def make_stable_device_id():
     raw = f"{socket.gethostname()}-{platform.system()}-{platform.machine()}-{CPU_MODEL_NAME}"
@@ -115,46 +153,13 @@ except Exception:
 # System helpers
 # ============================================================
 
-def get_cpu_model():
-    try:
-        import cpuinfo
-        return cpuinfo.get_cpu_info().get("brand_raw", "Unknown")
-    except Exception:
-        return platform.processor() or "Unknown"
 
 
-def get_os_full_name():
-    system = platform.system()
-    arch = platform.machine()
-
-    if system == "Windows":
-        return f"Windows {platform.release()} {platform.version()} {arch}"
-
-    if system == "Linux":
-        try:
-            os_info = {}
-            with open("/etc/os-release", "r", encoding="utf-8") as f:
-                for line in f:
-                    if "=" in line:
-                        k, v = line.strip().split("=", 1)
-                        os_info[k] = v.strip('"')
-            return f"{os_info.get('PRETTY_NAME', 'Linux')} {arch}"
-        except Exception:
-            return f"Linux {platform.release()} {arch}"
-
-    if system == "Darwin":
-        return f"macOS {platform.mac_ver()[0]} {arch}"
-
-    return f"{system} {platform.release()} {arch}"
 
 
-CPU_MODEL_NAME = get_cpu_model()
-OS_FULL_NAME = get_os_full_name()
-PYTHON_VERSION = sys.version.split()[0]
-PENNYLANE_VERSION = qml.__version__
-SYSTEM_RAM_TOTAL_GB = round(psutil.virtual_memory().total / (1024 ** 3), 2)
-CPU_CORE_COUNT = psutil.cpu_count(logical=False)
-CPU_THREAD_COUNT = psutil.cpu_count(logical=True)
+
+
+
 
 
 
